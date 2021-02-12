@@ -120,7 +120,18 @@ command_applet_destroy (MatePanelApplet *applet_widget, CommandApplet *command_a
     {
         g_object_unref (command_applet->command);
     }
+ 
+    if (command_applet->filename)
+    {
+        g_free (command_applet->filename);
+        command_applet->filename = NULL;
+    }
 
+    if (command_applet->image_chooser)
+    {
+        g_object_unref (command_applet->image_chooser);
+    }
+    
     g_object_unref (command_applet->settings);
 }
 
