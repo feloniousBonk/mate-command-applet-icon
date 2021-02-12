@@ -317,14 +317,6 @@ settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_a
 
     return;
 
-/*    if (command_applet->filename)
-*        g_free (command_applet->filename);
-*    command_applet->filename = filename;
-*
-*    if (filename)
-*        g_free (filename);
-*/
-
 }
 
 static void
