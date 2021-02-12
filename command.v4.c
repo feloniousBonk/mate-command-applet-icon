@@ -120,7 +120,18 @@ command_applet_destroy (MatePanelApplet *applet_widget, CommandApplet *command_a
     {
         g_object_unref (command_applet->command);
     }
+ 
+    if (command_applet->filename)
+    {
+        g_free (command_applet->filename);
+        command_applet->filename = NULL;
+    }
 
+    if (command_applet->image_chooser)
+    {
+        g_object_unref (command_applet->image_chooser);
+    }
+    
     g_object_unref (command_applet->settings);
 }
 
@@ -183,17 +194,13 @@ static void
 icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
 {
     gchar *name;
-    char *path;
-
     CommandApplet *command_applet;
 
     command_applet = (CommandApplet*) user_data;
     name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
-
-    path = get_image_path (command_applet);
-    if (name == path) {
-        name = path;
-    }
+    
+    if (command_applet->filename == name)
+        return;
 
     g_settings_set_string (command_applet->settings, ICON_NAME_KEY, name);
 
@@ -310,19 +317,11 @@ settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_a
     filename = g_settings_get_string (command_applet->settings, ICON_NAME_KEY);
     
     if (command_applet->filename == filename)
-        command_applet->filename = filename;
+        return;
     
     command_applet->filename = filename;
 
     return;
-
-/*    if (command_applet->filename)
-*        g_free (command_applet->filename);
-*    command_applet->filename = filename;
-*
-*    if (filename)
-*        g_free (filename);
-*/
 
 }
 
@@ -511,6 +510,7 @@ command_applet_fill (MatePanelApplet* applet)
     // set default icon before filename is set for the first time
     if (strlen (command_applet->filename) == 0)
         command_applet->filename = g_strdup_printf ("%s%s", CMD_ICONDIR, DEFAULT_ICON);
+
     // create pixbuf from filename and then scale it 
     GdkPixbuf *buf = gdk_pixbuf_new_from_file (command_applet->filename, NULL);
     buf = gdk_pixbuf_scale_simple (buf, 16, 16, GDK_INTERP_BILINEAR);
@@ -590,6 +590,7 @@ MATE_PANEL_APPLET_OUT_PROCESS_FACTORY("CommandAppletFactory",
                                       "Command applet",
                                       command_factory,
                                       NULL)
+
 
 
 
