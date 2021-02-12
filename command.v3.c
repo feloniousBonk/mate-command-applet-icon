@@ -191,7 +191,7 @@ icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
     name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
 
     path = get_image_path (command_applet);
-    if (g_strcmp0(path,name) == 0) {
+    if (g_strcmp0(path, name) == 0) {
         name = path;
     }
 
