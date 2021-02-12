@@ -139,8 +139,6 @@ static char* get_image_path(CommandApplet *command_applet)
 {     
     char *path;     
     
-    // if filename is a full path then a file has been chosen, so set path to filename
-    // else no file has been chosen so set path to CMD_ICONDIR folder
     if (g_path_is_absolute (command_applet->filename))     
         path = g_strdup (command_applet->filename);     
     else
@@ -199,8 +197,8 @@ icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
     command_applet = (CommandApplet*) user_data;
     name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
     
-    if (command_applet->filename == name)
-        return;
+//    if (command_applet->filename == name)
+//        return;
 
     g_settings_set_string (command_applet->settings, ICON_NAME_KEY, name);
 
@@ -244,10 +242,8 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
     char *path;
 
     builder = gtk_builder_new_from_resource ("/org/mate/mate-applets/command/command-preferences.ui");
-    
-    // get filechooser button from gui
     command_applet->image_chooser = GTK_WIDGET (gtk_builder_get_object (builder, "icon_entry"));
-    // get the path of filename and set path to button
+
     path = get_image_path (command_applet);
     gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (command_applet->image_chooser),
                        path);
@@ -312,14 +308,18 @@ settings_command_changed (GSettings *settings, gchar *key, CommandApplet *comman
 static void
 settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_applet)
 {
+    GdkPixbuf *buf;
     gchar *filename;
 
     filename = g_settings_get_string (command_applet->settings, ICON_NAME_KEY);
     
-    if (command_applet->filename == filename)
-        return;
-    
+//    if (command_applet->filename == filename)
+//        command_applet->filename = filename;
+    buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
+    command_applet->buf = buf;
+             
     command_applet->filename = filename;
+
 
     return;
 
@@ -507,16 +507,13 @@ command_applet_fill (MatePanelApplet* applet)
     command_applet->command = ma_command_new(command_applet->cmdline, NULL);
     command_applet->cancellable = g_cancellable_new ();
 
-    // set default icon before filename is set for the first time
+    // set filename as DEFAULT_ICON for initial applet launch
     if (strlen (command_applet->filename) == 0)
         command_applet->filename = g_strdup_printf ("%s%s", CMD_ICONDIR, DEFAULT_ICON);
 
-    // create pixbuf from filename and then scale it 
-    GdkPixbuf *buf = gdk_pixbuf_new_from_file (command_applet->filename, NULL);
-    buf = gdk_pixbuf_scale_simple (buf, 16, 16, GDK_INTERP_BILINEAR);
-
+    command_applet->buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
-    command_applet->image = GTK_IMAGE (gtk_image_new_from_pixbuf (buf));
+    command_applet->image = GTK_IMAGE (gtk_image_new_from_pixbuf (command_applet->buf));
     command_applet->label = GTK_LABEL (gtk_label_new (ERROR_OUTPUT));
     command_applet->timeout_id = 0;
 
