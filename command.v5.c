@@ -197,8 +197,8 @@ icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
     command_applet = (CommandApplet*) user_data;
     name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
     
-//    if (command_applet->filename == name)
-//        return;
+    if (command_applet->filename == name)
+        return;
 
     g_settings_set_string (command_applet->settings, ICON_NAME_KEY, name);
 
@@ -313,8 +313,6 @@ settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_a
 
     filename = g_settings_get_string (command_applet->settings, ICON_NAME_KEY);
     
-//    if (command_applet->filename == filename)
-//        command_applet->filename = filename;
     buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->buf = buf;
              
