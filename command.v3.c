@@ -198,6 +198,7 @@ icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
     g_settings_set_string (command_applet->settings, ICON_NAME_KEY, name);
 
     g_free(name);
+    g_free(path);
 }
 
 static void interval_value_changed (GtkSpinButton *spin_button, gpointer user_data)
