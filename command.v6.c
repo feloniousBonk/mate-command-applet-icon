@@ -37,9 +37,8 @@
 
 /* Applet constants */
 #define APPLET_ICON    "utilities-terminal"
-#define DEFAULT_ICON    "utilities-terminal.png"
 #define ERROR_OUTPUT   "#"
-#define CMD_ICONDIR    "/home/feloniousbonk/pictures/"
+#define DEFAULT_ICON    "/home/feloniousbonk/pictures/icons/utilities-terminal.png"
 
 /* GSettings constants */
 #define COMMAND_SCHEMA "org.mate.panel.applet.command"
@@ -143,8 +142,7 @@ static char* get_image_path(CommandApplet *command_applet)
         path = g_strdup (command_applet->filename);     
     else
     {
-        command_applet->filename = DEFAULT_ICON;
-        path = g_strdup_printf ("%s%s", CMD_ICONDIR, command_applet->filename);     
+        path = g_strdup_printf ("%s", DEFAULT_ICON);     
     }
     return path;     
 }     
@@ -315,10 +313,10 @@ settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_a
     
     buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->buf = buf;
-             
+    
     if (command_applet->filename == filename)
         return;
-    
+
     command_applet->filename = filename;
 
 }
@@ -507,7 +505,7 @@ command_applet_fill (MatePanelApplet* applet)
 
     // set filename as DEFAULT_ICON for initial applet launch
     if (strlen (command_applet->filename) == 0)
-        command_applet->filename = g_strdup_printf ("%s%s", CMD_ICONDIR, DEFAULT_ICON);
+        command_applet->filename = g_strdup_printf ("%s", DEFAULT_ICON);
 
     command_applet->buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
@@ -585,6 +583,7 @@ MATE_PANEL_APPLET_OUT_PROCESS_FACTORY("CommandAppletFactory",
                                       "Command applet",
                                       command_factory,
                                       NULL)
+
 
 
 
