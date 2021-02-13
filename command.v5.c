@@ -316,10 +316,10 @@ settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_a
     buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->buf = buf;
              
+    if (command_applet->filename == filename)
+        return;
+    
     command_applet->filename = filename;
-
-
-    return;
 
 }
 
