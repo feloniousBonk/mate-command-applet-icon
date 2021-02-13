@@ -57,7 +57,7 @@
 #define GET_WIDGET(x) (GTK_WIDGET (gtk_builder_get_object (builder, (x))))
 #define GET_DIALOG(x) (GTK_DIALOG (gtk_builder_get_object (builder, (x))))
 
-typedef struct
+typedef struct 
 {
     MatePanelApplet   *applet;
 
