@@ -505,7 +505,7 @@ command_applet_fill (MatePanelApplet* applet)
 
     // set filename as DEFAULT_ICON for initial applet launch
     if (strlen (command_applet->filename) == 0)
-        command_applet->filename = g_strdup_printf ("%s", DEFAULT_ICON);
+        command_applet->filename = DEFAULT_ICON;
 
     command_applet->buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
