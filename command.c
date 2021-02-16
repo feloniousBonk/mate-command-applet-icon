@@ -130,6 +130,11 @@ command_applet_destroy (MatePanelApplet *applet_widget, CommandApplet *command_a
         g_object_unref (command_applet->image_chooser);
     }
     
+    if (command_applet->buf)
+    {
+        g_object_unref (command_applet->buf);
+    }
+    
     g_object_unref (command_applet->settings);
 }
 
@@ -380,7 +385,6 @@ process_command_output (CommandApplet *command_applet, gchar *output)
 
             
             g_free (goutput);
-            //g_free (icon);
         }
         else
             gtk_label_set_text (command_applet->label, ERROR_OUTPUT);
@@ -510,7 +514,7 @@ command_applet_fill (MatePanelApplet* applet)
 
     command_applet->buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
-    command_applet->image = GTK_IMAGE (gtk_image_new_from_pixbuf(command_applet->buf));
+    command_applet->image = GTK_IMAGE (gtk_image_new_from_pixbuf (command_applet->buf));
     command_applet->label = GTK_LABEL (gtk_label_new (ERROR_OUTPUT));
     command_applet->timeout_id = 0;
 
