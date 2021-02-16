@@ -1,4 +1,4 @@
-/* command.c:
+/* command.c: 
  *
  * Copyright (C) 2013-2014 Stefano Karapetsas
  *
