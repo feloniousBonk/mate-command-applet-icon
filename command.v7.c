@@ -38,7 +38,7 @@
 /* Applet constants */
 #define APPLET_ICON    "utilities-terminal"
 #define ERROR_OUTPUT   "#"
-#define DEFAULT_ICON    "/home/feloniousbonk/pictures/icons/utilities-terminal.png"
+#define DEFAULT_ICON    "/home/feloniousbonk/pictures/utilities-terminal.png"
 
 /* GSettings constants */
 #define COMMAND_SCHEMA "org.mate.panel.applet.command"
@@ -71,7 +71,6 @@ typedef struct
     gboolean           running;
     GdkPixbuf         *buf;
 
-    gchar             *text;
     gchar             *cmdline;
     gchar             *filename;
     gint               interval;
@@ -142,7 +141,7 @@ static char* get_image_path(CommandApplet *command_applet)
         path = g_strdup (command_applet->filename);     
     else
     {
-        path = g_strdup_printf ("%s", DEFAULT_ICON);     
+        path = g_strdup (DEFAULT_ICON);     
     }
     return path;     
 }     
@@ -189,6 +188,7 @@ command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data)
 static void
 icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
 {
+    GdkPixbuf *buf;
     gchar *name;
     CommandApplet *command_applet;
 
@@ -197,8 +197,13 @@ icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
     
     if (command_applet->filename == name)
         return;
-
+   
     g_settings_set_string (command_applet->settings, ICON_NAME_KEY, name);
+
+    buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
+    command_applet->buf = buf;
+
+    gtk_image_set_from_pixbuf(GTK_IMAGE(command_applet->image), command_applet->buf);
 
     g_free(name);
 }
@@ -306,19 +311,14 @@ settings_command_changed (GSettings *settings, gchar *key, CommandApplet *comman
 static void
 settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_applet)
 {
-    GdkPixbuf *buf;
     gchar *filename;
 
     filename = g_settings_get_string (command_applet->settings, ICON_NAME_KEY);
-    
-    buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
-    command_applet->buf = buf;
-    
+
     if (command_applet->filename == filename)
         return;
 
     command_applet->filename = filename;
-
 }
 
 static void
@@ -331,6 +331,7 @@ settings_width_changed (GSettings *settings, gchar *key, CommandApplet *command_
     if (command_applet->width != width) {
         command_applet->width = width;
     }
+
 }
 
 static void
@@ -370,7 +371,6 @@ process_command_output (CommandApplet *command_applet, gchar *output)
         if (g_key_file_load_from_data (file, output, -1, G_KEY_FILE_NONE, NULL))
         {
             gchar *goutput = g_key_file_get_string (file, GK_COMMAND_GROUP, GK_COMMAND_OUTPUT, NULL);
-            gchar *icon = g_key_file_get_string (file, GK_COMMAND_GROUP, GK_COMMAND_ICON, NULL);
 
             if (goutput)
             {
@@ -378,11 +378,9 @@ process_command_output (CommandApplet *command_applet, gchar *output)
                 gtk_label_set_markup (command_applet->label, goutput);
             }
 
-            if (icon)
-                gtk_image_set_from_icon_name (command_applet->image, icon, GTK_ICON_SIZE_LARGE_TOOLBAR);
-
+            
             g_free (goutput);
-            g_free (icon);
+            //g_free (icon);
         }
         else
             gtk_label_set_text (command_applet->label, ERROR_OUTPUT);
@@ -400,8 +398,10 @@ process_command_output (CommandApplet *command_applet, gchar *output)
             *g_utf8_offset_to_pointer(output, command_applet->width) = '\0';
         }
 
+
         gtk_label_set_text (command_applet->label, output);
     }
+
 }
 
 static void command_async_ready_callback (GObject *source_object, GAsyncResult *res, gpointer user_data)
@@ -447,6 +447,7 @@ static gboolean timeout_callback (CommandApplet *command_applet)
         command_execute (command_applet);
         return G_SOURCE_REMOVE;
     }
+
 }
 
 static gboolean
@@ -475,7 +476,7 @@ command_execute (CommandApplet *command_applet)
     if (g_cancellable_is_cancelled (command_applet->cancellable)) {
         g_cancellable_reset (command_applet->cancellable);
     }
-
+    
     command_applet->timeout_id = g_timeout_add_seconds (command_applet->interval,
                                                         (GSourceFunc) timeout_callback,
                                                         command_applet);
@@ -509,7 +510,7 @@ command_applet_fill (MatePanelApplet* applet)
 
     command_applet->buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, 16, 16, NULL);
     command_applet->box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
-    command_applet->image = GTK_IMAGE (gtk_image_new_from_pixbuf (command_applet->buf));
+    command_applet->image = GTK_IMAGE (gtk_image_new_from_pixbuf(command_applet->buf));
     command_applet->label = GTK_LABEL (gtk_label_new (ERROR_OUTPUT));
     command_applet->timeout_id = 0;
 
@@ -546,7 +547,7 @@ command_applet_fill (MatePanelApplet* applet)
     g_signal_connect (command_applet->settings, "changed::" ICON_NAME_KEY,
                       G_CALLBACK (settings_icon_changed),
                       command_applet);
-
+                      
     g_settings_bind (command_applet->settings,
                      SHOW_ICON_KEY,
                      command_applet->image,
