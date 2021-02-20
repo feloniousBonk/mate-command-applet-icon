@@ -54,3 +54,11 @@ If you can't patch `command.diff` - copy this repository's `command.c` to **`mat
 
 If you want to change the icons size - edit the macro `ICON_SIZE` at the top of `command.c` after it has been patched to whatever size you want
 
+```c
+ 37 
+ 38 /* Applet constants */
+ 39 #define ICON_SIZE      16
+ 40 #define APPLET_ICON    "utilities-terminal"
+ 41 #define ERROR_OUTPUT   "#"
+ 42 
+```
