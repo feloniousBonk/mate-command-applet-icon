@@ -1,12 +1,11 @@
 # mate-command-applet                                                                                                                                           
-Archive of different versions of source code for a project to add icon chooser functionality to mate-panel's command-applet    
-    
-**Directories**    
-    
-- data : glade ui files and glib schema files    
-    
-- versions : different versions of the projects progress starting from `command.v1.c`    
-    
-- diffs: diff files and patches    
-    
-- version-OG : original project that did not have a file chooser button.     
+Mate's command-applet for mate-panel with added functionality to choose a custom icon. 
+
+**Files**
+- command.c : full source code file with added functionality
+
+- command.diff : diff file for patching the original source code from Mate's github repository
+
+- command-preferences.ui - xml file for the command-applet preferences dialog box with added file-chooser
+
+- org.mate.panel.applet.command.gschema.xml - glib schema file for the applet with added key info for icon chooser
