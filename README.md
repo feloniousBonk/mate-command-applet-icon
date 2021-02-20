@@ -1,6 +1,7 @@
 # mate-command-applet-icon                                                                                                                                           
 Mate's command-applet for mate-panel with added functionality to choose a custom icon. 
-![screenshot](command-applet-icon.png)
+
+![screenshot](/docs/command-applet-icon.png)
 
 ## Files
 `command.c` : full source code file with added functionality
