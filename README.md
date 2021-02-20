@@ -30,14 +30,14 @@ git clone https://github.com/mate-desktop/mate-applets.git
 - copy `command.diff` to **`mate-applets/command/src`**
 ## 
 
-**go to directory `mate-applets/command/src`** 
+**go to `mate-applets` subdirectory `mate-applets/command/src`** 
 
 - patch the file `command.diff` to `mate-applets/command/src/command.c` :
 ```bash
 $ patch -p1 --merge -i command.diff
  ```
 ## 
-**run autogen.sh in `mate-applets` directory**
+**return to `mate-applets` parent directory and run autogen.sh**
 ```bash
 $ ./autogen.sh
 ```
