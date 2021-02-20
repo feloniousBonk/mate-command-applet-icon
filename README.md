@@ -11,16 +11,16 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 `org.mate.panel.applet.command.gschema.xml.in` : glib schema file for the applet with added key info for icon chooser
 
 ## Configure
-clone mate-applets repository :
+**clone mate-applets repository** :
 ```bash 
 git clone https://github.com/mate-desktop/mate-applets.git
 ```
 
-clone this repository :
+**clone this repository** :
 ```bash
  git clone https://github.com/feloniousBonk/mate-command-applet.git
  ```
-*enter this repository's directory*
+**enter this repository's directory** :
 
 - copy `command-preferences.ui` to `mate-applets/command/data/` \*(confirm overwrite Yes)\*
 
@@ -28,7 +28,7 @@ clone this repository :
 
 - copy `command.diff` to `mate-applets/command/src`
 
-*go to directory* `mate-applets/command/src` 
+**go to directory** `mate-applets/command/src` 
 
 - patch the file `command.diff` to `command.c` :
 ```bash
