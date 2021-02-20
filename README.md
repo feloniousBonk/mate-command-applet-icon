@@ -1,4 +1,4 @@
-# mate-command-applet                                                                                                                                           
+# mate-command-applet-icon                                                                                                                                           
 Mate's command-applet for mate-panel with added functionality to choose a custom icon. 
 
 ## Files
