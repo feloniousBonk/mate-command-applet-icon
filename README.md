@@ -34,14 +34,18 @@ git clone https://github.com/mate-desktop/mate-applets.git
 
 - patch the file `command.diff` to `command.c` :
 ```bash
-patch -p1 --merge -i command.diff
+$ patch -p1 --merge -i command.diff
  ```
 ## 
 **run autogen.sh in `mate-applets` directory**
 ```bash
-./autogen.sh
+$ ./autogen.sh
 ```
 **continue command-applet compilation as normal** 
+```bash
+$ cd mate-applets/command
+$ sudo make install
+```
 
 documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](url) & [www.mate-desktop.org](url)
 
