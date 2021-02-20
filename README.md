@@ -8,4 +8,4 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 
 - command-preferences.ui - xml file for the command-applet preferences dialog box with added file-chooser
 
-- org.mate.panel.applet.command.gschema.xml - glib schema file for the applet with added key info for icon chooser
+- org.mate.panel.applet.command.gschema.xml.in - glib schema file for the applet with added key info for icon chooser
