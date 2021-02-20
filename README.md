@@ -19,7 +19,8 @@ git clone https://github.com/mate-desktop/mate-applets.git
 **clone this repository** :
 ```bash
  git clone https://github.com/feloniousBonk/mate-command-applet.git
- ```
+```
+## 
 **enter this repository's directory** :
 
 - copy `command-preferences.ui` to `mate-applets/command/data/` \*(confirm overwrite Yes)\*
@@ -27,6 +28,7 @@ git clone https://github.com/mate-desktop/mate-applets.git
 - copy `org.mate.panel.applet.command.gschema.xml.in` to `mate-applets/command/data/` \*(confirm overwrite Yes)\*
 
 - copy `command.diff` to `mate-applets/command/src`
+## 
 
 **go to directory** `mate-applets/command/src` 
 
