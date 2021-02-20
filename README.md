@@ -23,25 +23,29 @@ git clone https://github.com/mate-desktop/mate-applets.git
 ## 
 **enter this repository's directory** :
 
-- copy `command-preferences.ui` to `mate-applets/command/data/` \*(confirm overwrite Yes)\*
+- copy `command-preferences.ui` to **`mate-applets/command/data/`** \*(confirm overwrite Yes)\*
 
-- copy `org.mate.panel.applet.command.gschema.xml.in` to `mate-applets/command/data/` \*(confirm overwrite Yes)\*
+- copy `org.mate.panel.applet.command.gschema.xml.in` to **`mate-applets/command/data/`** \*(confirm overwrite Yes)\*
 
-- copy `command.diff` to `mate-applets/command/src`
+- copy `command.diff` to **`mate-applets/command/src`**
 ## 
 
-**go to directory** `mate-applets/command/src` 
+**go to directory `mate-applets/command/src`** 
 
 - patch the file `command.diff` to `command.c` :
 ```bash
 patch -p1 --merge -i command.diff
  ```
-
+## 
+**run autogen.sh in `mate-applets` directory**
+```bash
+./autogen.sh
+```
 **continue command-applet compilation as normal** 
 
 documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](url) & [www.mate-desktop.org](url)
 
 ## Notes
-If you can't patch `command.diff` - copy this repository's `command.c` to `mate-applets/command/src` \*(confirm overwrite Yes)\* --_If you have made any of your own changes to_ `mate-applets/command/src/command.c` _this will delete those changes_ --
+If you can't patch `command.diff` - copy this repository's `command.c` to **`mate-applets/command/src`** \*(confirm overwrite Yes)\* --_If you have made any of your own changes to_ **`mate-applets/command/src/command.c`** _this will delete those changes_ --
 
 If you want to change the icons size - edit the macro `ICON_SIZE` at the top of `command.c` after it has been patched to whatever size you want
