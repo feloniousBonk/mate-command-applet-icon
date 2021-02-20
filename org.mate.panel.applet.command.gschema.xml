@@ -16,7 +16,7 @@
       <description>Number of characters to display</description>
     </key>
     <key name="icon" type="s">
-      <default>' '</default>
+      <default>''</default>
       <summary>Icon filename</summary>
       <description>Enter pathname to image file to use for icon</description>
     </key>
