@@ -37,7 +37,7 @@ git clone https://github.com/mate-desktop/mate-applets.git
 patch -p1 --merge -i command.diff
  ```
 
-*continue command-applet compilation as normal* 
+**continue command-applet compilation as normal** 
 
 documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](url) & [www.mate-desktop.org](url)
 
