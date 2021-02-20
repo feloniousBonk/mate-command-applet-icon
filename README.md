@@ -49,7 +49,7 @@ $ cd mate-applets/command
 $ sudo make install
 ```
 
-documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](url) & [www.mate-desktop.org](url)
+documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](https://github.com/mate-desktop/mate-applets]) & [www.mate-desktop.org](www.mate-desktop.org)
 
 ## Notes
 If you can't patch `command.diff` - copy this repository's `command.c` to **`mate-applets/command/src`** \*(confirm overwrite Yes)\* *WARNING*: _If you have made any of your own changes to_ `mate-applets/command/src/command.c` _this will delete those changes_
