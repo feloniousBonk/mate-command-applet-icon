@@ -37,7 +37,7 @@ git clone https://github.com/mate-desktop/mate-applets.git
 $ patch -p1 --merge -i command.diff
  ```
 ## 
-**return to `mate-applets` parent directory and run autogen.sh**
+**return to the `mate-applets` parent directory and run autogen.sh**
 ```bash
 $ ./autogen.sh
 ```
