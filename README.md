@@ -12,7 +12,13 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 - gtk+-3.14.0
 - glib-2.36.0
 - libgtop-2.12.0
+- libmate-panel
 - libwnck
+- libnl3
+- polkit
+- autogen
+- yelp-tools
+- autoconf && autoconf-archive
 
 **Some extras that improve functionality** :
 - libnotify
