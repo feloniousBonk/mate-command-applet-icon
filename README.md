@@ -19,7 +19,8 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 - polkit
 - autogen
 - yelp-tools
-- autoconf && autoconf-archive
+- autoconf 
+- autoconf-archive
 
 **Some extras that improve functionality** :
 - libnotify
