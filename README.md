@@ -78,7 +78,7 @@ $ sudo make install
 \*_you will need to kill and restart all command-applet instances already running on your system for changes to take effect. Alternatively you can log out and log back in to your user account._\*
 
 ## Notes
-If you want to change the icons size - edit the macro `ICON_SIZE` at the top of `command.c` to whatever size you want
+If you want to change the icon's size - edit the macro `ICON_SIZE` at the top of `command.c` to whatever size you want
 
 ```c
  37 
