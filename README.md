@@ -19,7 +19,7 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 - dbus-0.34
 
 ## Files
-`install.sh` : install script to clone mate-applet repository and replace old command-applet files with new
+`setup.sh` : install script to clone mate-applet repository and replace old command-applet files with new
 
 `command.c` : full source code file with added functionality
 
@@ -37,17 +37,17 @@ $ git clone https://github.com/feloniousBonk/mate-command-applet-icon.git
 ## 
 **enter this repository's directory** :
 
-- make `install.sh` executable
+- make `setup.sh` executable
 ```bash
-$ chmod +x install.sh
+$ chmod +x setup.sh
 ```
-- run `install.sh` script
+- run `setup.sh` script
 ```bash
-$ bash ./install.sh
+$ bash ./setup.sh
 ```
 ## 
 
-**install.sh will clone `mate-applets` repository and replace appropriate files** 
+**setup.sh will clone `mate-applets` repository and replace appropriate files** 
 
 - cd into **`mate-applets/`** directory
 ```bash
