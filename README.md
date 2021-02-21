@@ -3,58 +3,73 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 
 ![screenshot](/docs/command-applet-icon.png)
 
-## Files
-`command.c` : full source code file with added functionality
+## Requirements
 
-`command.diff` : diff file for patching the original source code from Mate's github repository
+**You need at least** :
+
+- mate-panel
+- mate-common
+- gtk+-3.14.0
+- glib-2.36.0
+- libgtop-2.12.0
+- libwnck
+
+**Some extras that improve functionality** :
+- libnotify
+- dbus-0.34
+
+## Files
+`install.sh` : install script to clone mate-applet repository and replace old command-applet files with new
+
+`command.c` : full source code file with added functionality
 
 `command-preferences.ui` : xml file for the command-applet preferences dialog box with added file-chooser
 
 `org.mate.panel.applet.command.gschema.xml.in` : glib schema file for the applet with added key info for icon chooser
 
-## Configure
-**clone mate-applets repository** :
-```bash 
-git clone https://github.com/mate-desktop/mate-applets.git
-```
+`docs/command.diff` : diff file for patching the original source code from Mate's github repository
 
+## Configure
 **clone this repository** :
 ```bash
- git clone https://github.com/feloniousBonk/mate-command-applet-icon.git
+$ git clone https://github.com/feloniousBonk/mate-command-applet-icon.git
 ```
 ## 
 **enter this repository's directory** :
 
-- copy `command-preferences.ui` to **`mate-applets/command/data`** \*(confirm overwrite Yes)\*
-
-- copy `org.mate.panel.applet.command.gschema.xml.in` to **`mate-applets/command/data`** \*(confirm overwrite Yes)\*
-
-- copy `command.diff` to **`mate-applets/command/src`**
-## 
-
-**go to `mate-applets` subdirectory `mate-applets/command/src`** 
-
-- patch the file `command.diff` to `mate-applets/command/src/command.c` :
+- make `install.sh` executable
 ```bash
-$ patch -p1 --merge -i command.diff
- ```
-## 
-**return to the `mate-applets` parent directory and run autogen.sh**
-```bash
-$ ./autogen.sh
+$ chmod +x install.sh
 ```
-**continue command-applet compilation as normal** 
+- run `install.sh` script
 ```bash
-$ cd mate-applets/command
+$ bash ./install.sh
+```
+## 
+
+**install.sh will clone `mate-applets` repository and replace appropriate files** 
+
+- cd into **`mate-applets/`** directory
+```bash
+$ cd mate-applets
+```
+
+- run `autogen.sh`
+```bash
+$ bash ./autogen.sh
+ ```
+\*_if autogen.sh fails it will tell you what dependency you are missing in error output. Install missing dependency with your system's package manager_\*
+## 
+
+**compile command-applet** 
+```bash
+$ cd command/
 $ sudo make install
 ```
-
 documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](https://github.com/mate-desktop/mate-applets) & [https://www.mate-desktop.org](https://www.mate-desktop.org)
 
 ## Notes
-If you can't patch `command.diff` - copy this repository's `command.c` to **`mate-applets/command/src`** \*(confirm overwrite Yes)\* *WARNING*: _If you have made any of your own changes to_ `mate-applets/command/src/command.c` _this will delete those changes_
-
-If you want to change the icons size - edit the macro `ICON_SIZE` at the top of `command.c` after it has been patched to whatever size you want
+If you want to change the icons size - edit the macro `ICON_SIZE` at the top of `command.c` to whatever size you want
 
 ```c
  37 
