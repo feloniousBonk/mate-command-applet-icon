@@ -69,7 +69,7 @@ $ bash ./autogen.sh
 $ cd command/
 $ sudo make install
 ```
-documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](https://github.com/mate-desktop/mate-applets) & [https://www.mate-desktop.org](https://www.mate-desktop.org)
+- documentation for compiling mate-applets @ [https://github.com/mate-desktop/mate-applets](https://github.com/mate-desktop/mate-applets) & [https://www.mate-desktop.org](https://www.mate-desktop.org)
 
 \*_you will need to kill and restart all command-applet instances already running on your system for changes to take effect. Alternatively you can log out and log back in to your user account._\*
 
