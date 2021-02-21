@@ -9,6 +9,7 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 
 - mate-panel
 - mate-common
+- make-4.3
 - gtk+-3.14.0
 - glib-2.36.0
 - libgtop-2.12.0
@@ -65,6 +66,8 @@ $ bash ./autogen.sh
 ## 
 
 **compile command-applet** 
+
+- cd into **`command/`** directory then compile and install applet using `make`
 ```bash
 $ cd command/
 $ sudo make install
