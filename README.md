@@ -29,11 +29,11 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 ## Files
 `setup.sh` : initial setup script to clone [mate-applets repository](https://github.com/mate-desktop/mate-applets) and replace old command-applet files with new
 
-`command.c` : full source code file with added functionality
+`command.c` : source code file with added functionality
 
-`command-preferences.ui` : xml file for the command-applet preferences dialog box with added file-chooser
+`command-preferences.ui` : xml file for the command-applet preferences dialog box ui with added file-chooser
 
-`org.mate.panel.applet.command.gschema.xml.in` : glib schema file for the applet with added key info for icon chooser
+`org.mate.panel.applet.command.gschema.xml.in` : glib schema file for the applet with added key info for icon file chooser
 
 `docs/command.diff` : diff file for patching the original source code from Mate's github repository
 
