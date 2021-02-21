@@ -19,7 +19,7 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 - dbus-0.34
 
 ## Files
-`setup.sh` : install script to clone mate-applet repository and replace old command-applet files with new
+`setup.sh` : initial setup script to clone mate-applet repository and replace old command-applet files with new
 
 `command.c` : full source code file with added functionality
 
