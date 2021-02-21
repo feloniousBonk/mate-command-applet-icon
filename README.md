@@ -51,7 +51,7 @@ $ bash ./install.sh
 
 - cd into **`mate-applets/`** directory
 ```bash
-$ cd mate-applets
+$ cd mate-applets/
 ```
 
 - run `autogen.sh`
