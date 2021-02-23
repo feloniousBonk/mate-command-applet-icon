@@ -43,12 +43,8 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 $ git clone https://github.com/feloniousBonk/mate-command-applet-icon.git
 ```
 ## 
-**enter this repository's directory** :
+**enter this repository's directory** 
 
-- make `setup.sh` executable
-```bash
-$ chmod +x setup.sh
-```
 - run `setup.sh` script
 ```bash
 $ bash ./setup.sh
