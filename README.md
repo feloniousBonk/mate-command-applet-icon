@@ -38,7 +38,7 @@ Mate's command-applet for mate-panel with added functionality to choose a custom
 `docs/command.diff` : diff file for patching the original source code from Mate's github repository
 
 ## Configure
-**clone this repository** :
+**clone this repository** 
 ```bash
 $ git clone https://github.com/feloniousBonk/mate-command-applet-icon.git
 ```
