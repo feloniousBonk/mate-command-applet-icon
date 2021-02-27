@@ -62,7 +62,7 @@ $ bash ./autogen.sh
 \*_if autogen.sh fails it will tell you what dependency you are missing in error output. Install missing dependency with your system's package manager_\*
 ## 
 
-**compile command-applet** 
+**install command-applet** 
 
 - cd into **`command/`** directory then compile and install applet using `make`
 ```bash
