@@ -71,7 +71,6 @@ typedef struct
     GdkPixbuf         *buf;
     GtkWidget         *image_chooser;
 
-    gchar             *name;
     gchar             *cmdline;
     gchar             *filename;
     gint               interval;
