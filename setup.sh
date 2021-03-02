@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DATA_DIR="mate-applets/command/data"
-SRC_DIR="mate-applets/command/src"
+DATA_DIR="./mate-applets/command/data"
+SRC_DIR="./mate-applets/command/src"
 
 echo -e "cloning mate-applets repository and replacing appropriate command-applet files, please wait...\n===============================";
 rm ./docs/command-applet-icon.png;
