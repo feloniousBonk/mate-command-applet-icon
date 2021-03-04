@@ -1,7 +1,6 @@
 ### TODO
 **In Progress**
-
-***TBD
+- \* _TBD_ \*
 
 **Completed**
 - [x] Set filter to filechooser so file picker only shows image files
