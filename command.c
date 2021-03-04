@@ -298,18 +298,18 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
 {
     GtkDialog *dialog;
     GtkBuilder *builder;
-	GtkFileFilter *filter;
+    GtkFileFilter *filter;
     gchar *path;
 
     builder = gtk_builder_new_from_resource ("/org/mate/mate-applets/command/command-preferences.ui");
     command_applet->icon_chooser = GTK_WIDGET (gtk_builder_get_object (builder, "icon_entry"));
 
     /* set filter to filechooser to only show image files */
-	filter = gtk_file_filter_new ();
-	gtk_file_filter_set_name (filter, _("Images"));
-	gtk_file_filter_add_pixbuf_formats (filter);
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (command_applet->icon_chooser), filter);
-	gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (command_applet->icon_chooser), filter);
+    filter = gtk_file_filter_new ();
+    gtk_file_filter_set_name (filter, _("Images"));
+    gtk_file_filter_add_pixbuf_formats (filter);
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (command_applet->icon_chooser), filter);
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (command_applet->icon_chooser), filter);
 
     /* set filename path to filechooser */
     path = get_icon_path (command_applet);
