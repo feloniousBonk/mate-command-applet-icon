@@ -74,13 +74,4 @@ $ sudo make install
 \*_you will need to kill and restart all command-applet instances already running on your system for changes to take effect. Alternatively you can log out and log back in to your user account._\*
 
 ## Notes
-If you want to change the icon's size - edit the macro `ICON_SIZE` at the top of `command.c` to whatever size you want
-
-```c
- 37 
- 38 /* Applet constants */
- 39 #define ICON_SIZE      16
- 40 #define APPLET_ICON    "utilities-terminal"
- 41 #define ERROR_OUTPUT   "#"
- 42 
-```
+- added icon size spinbutton 3/4/2021
