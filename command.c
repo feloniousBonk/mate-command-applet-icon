@@ -323,7 +323,7 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
     g_settings_bind (command_applet->settings, INTERVAL_KEY, GET_WIDGET ("interval_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
     g_settings_bind (command_applet->settings, WIDTH_KEY, GET_WIDGET ("width_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
     g_settings_bind (command_applet->settings, ICON_SIZE_KEY, GET_WIDGET ("icon_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
-    g_settings_bind (command_applet->settings, ICON_NAME_KEY, GET_WIDGET ("icon_entry"), "name", G_SETTINGS_BIND_GET_NO_CHANGES);
+    g_settings_bind (command_applet->settings, ICON_NAME_KEY, GET_WIDGET ("icon_entry"), "title", G_SETTINGS_BIND_GET_NO_CHANGES);
     g_settings_bind (command_applet->settings, SHOW_ICON_KEY, GET_WIDGET ("show_icon_check"), "active", G_SETTINGS_BIND_DEFAULT);
 
     /* signals */
