@@ -1,8 +1,9 @@
 ### TODO
 **In Progress**
 - [ ] clean up some possibly redundant code:
-    - uneeded calls to get icon path in callback functions icon_name_changed and settings_icon_changed
-    - file set to filechooser when preference dialog opened, then called again in function settings_icon_changed
+    - uneeded calls to get icon path in callback function icon_name_changed. 
+    - uneeded call to get icon path in function settings_icon_changed.
+    - filename is set to filechooser when preference dialog opened, then called again in function settings_icon_changed after new file selection.
 
 **Completed**
 - [x] Set filter to filechooser so file picker only shows image files
