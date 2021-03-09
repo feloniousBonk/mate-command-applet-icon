@@ -42,7 +42,7 @@
 #define COMMAND_SCHEMA "org.mate.panel.applet.command"
 #define COMMAND_KEY    "command"
 #define INTERVAL_KEY   "interval"
-#define ICON_SIZE_KEY  "icon-size"    
+#define ICON_SIZE_KEY  "icon-size"
 #define ICON_NAME_KEY  "icon"
 #define SHOW_ICON_KEY  "show-icon"
 #define WIDTH_KEY      "width"
@@ -67,7 +67,6 @@ typedef struct
     GdkPixbuf         *buf;
     MaCommand         *command;
     GCancellable      *cancellable;
-    GtkWidget         *icon_chooser;
     gboolean           running;
 
     gchar             *cmdline;
@@ -86,7 +85,7 @@ static gboolean command_text_changed (GtkWidget *widget, GdkEvent  *event, gpoin
 static void interval_value_changed (GtkSpinButton *spin_button, gpointer user_data);
 static void width_value_changed (GtkSpinButton *spin_button, gpointer user_data);
 static void icon_size_changed (GtkSpinButton *spin_button, gpointer user_data);
-static void icon_name_changed (GtkFileChooser *chooser, CommandApplet *command_applet);
+static void icon_name_changed (GtkFileChooser *chooser, gpointer user_data);
 static void command_async_ready_callback (GObject *source_object, GAsyncResult *res, gpointer user_data);
 static gboolean timeout_callback (CommandApplet *command_applet);
 static gboolean load_icon_image(CommandApplet *command_applet);
@@ -122,62 +121,8 @@ command_applet_destroy (MatePanelApplet *applet_widget, CommandApplet *command_a
     {
         g_object_unref (command_applet->command);
     }
- 
+
     g_object_unref (command_applet->settings);
-}
-
-static char* get_default_icon (CommandApplet *command_applet)
-{
-    gchar *default_icon;
-    
-    const gchar *icon_file = gtk_icon_info_get_filename (gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default(), /* get icon theme */
-                                                                                            APPLET_ICON, /* choose icon name */
-                                                                                            command_applet->size, /* icon size */
-                                                                                            0)); /* icon flag */
-    default_icon = g_strdup (icon_file);
-    return default_icon;
-}
-
-static char* get_icon_path(CommandApplet *command_applet)     
-{     
-   gchar *path;     
-    
-    if (g_path_is_absolute (command_applet->filename))     
-        path = g_strdup (command_applet->filename);     
-    else 
-        path = get_default_icon (command_applet);
-
-    return path;     
-}     
-
-static gboolean load_icon_image(CommandApplet *command_applet)
-{
-    GdkPixbuf *buf;
-    GError    *error = NULL;
-    char      *path;                                      
-                                                                                      
-    path = get_icon_path (command_applet);             
-                                        
-    if (!command_applet->filename)                                            
-        command_applet->filename = path; 
-                                                    
-    buf = gdk_pixbuf_new_from_file_at_size (path, command_applet->size, command_applet->size, &error);   
-    if (error) {                                       
-        g_warning ("Cannot load '%s': %s", path, error->message);                      
-        g_error_free (error);                             
-        g_free (path);               
-        return FALSE;                                                 
-    }                              
-                                                  
-    if (command_applet->buf)     
-        g_object_unref (command_applet->buf);
-    command_applet->buf = buf;
-
-    gtk_image_set_from_pixbuf(GTK_IMAGE(command_applet->image), command_applet->buf);
-                     
-    g_free (path);                                                 
-                                     
-    return TRUE;
 }
 
 /* Show the about dialog */
@@ -196,6 +141,54 @@ command_about_callback (GtkAction *action, CommandApplet *command_applet)
                           "translator-credits", _("translator-credits"),
                           "logo-icon-name", APPLET_ICON,
                           NULL );
+}
+
+static char* get_default_icon (CommandApplet *command_applet)
+{
+    gchar *default_icon;
+
+    const gchar *icon_file = gtk_icon_info_get_filename (gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default(), /* get icon theme */
+                                                                                            APPLET_ICON, /* choose icon name */
+                                                                                            command_applet->size, /* icon size */
+                                                                                            0)); /* icon flag */
+    default_icon = g_strdup (icon_file);
+    return default_icon;
+}
+
+static char* get_icon_path(CommandApplet *command_applet)
+{
+   gchar *path;
+
+    if (g_path_is_absolute (command_applet->filename))
+        path = g_strdup (command_applet->filename);
+    else
+        path = get_default_icon (command_applet);
+    return path;
+}
+
+static gboolean load_icon_image(CommandApplet *command_applet)
+{
+    GError    *error = NULL;
+    char      *path;
+
+    path = get_icon_path (command_applet);
+
+    if (command_applet->buf)
+        g_object_unref (command_applet->buf);
+    command_applet->buf = gdk_pixbuf_new_from_file_at_size (path, command_applet->size, command_applet->size, &error);
+
+    if (error) {
+        g_warning ("Cannot load '%s': %s", path, error->message);
+        g_error_free (error);
+        g_free (path);
+        return FALSE;
+    }
+
+    gtk_image_set_from_pixbuf(GTK_IMAGE(command_applet->image), command_applet->buf);
+
+    g_free (path);
+
+    return TRUE;
 }
 
 static gboolean
@@ -219,34 +212,20 @@ command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data)
     return TRUE;
 }
 
-static void icon_name_changed (GtkFileChooser *chooser, CommandApplet *command_applet)
+static void icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
 {
+    gchar *file;
+    CommandApplet *command_applet;
 
-    gchar *path;
-    gchar *filename;
-    gchar *path_gsettings;
+    command_applet = (CommandApplet*) user_data;
+    file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
 
-    path = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
-    
-    if (!path || !path[0]) {
-        g_free (path);
+    if (command_applet->filename == file)
         return;
-    }
 
-    path_gsettings = get_icon_path (command_applet);
+    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, file);
 
-    if (!strcmp (path, path_gsettings)) {
-        g_free (path);
-        g_free (path_gsettings);
-        return;
-    }
-    g_free (path_gsettings);
-
-    filename = path;
-
-    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, filename);
-
-    g_free (path);
+    g_free (file);
 }
 
 static void icon_size_changed (GtkSpinButton *spin_button, gpointer user_data)
@@ -299,23 +278,27 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
     GtkDialog *dialog;
     GtkBuilder *builder;
     GtkFileFilter *filter;
+    GtkFileChooser *icon_chooser;
     gchar *path;
 
-    builder = gtk_builder_new_from_resource ("/org/mate/mate-applets/command/command-preferences.ui");
-    command_applet->icon_chooser = GTK_WIDGET (gtk_builder_get_object (builder, "icon_entry"));
+    builder = gtk_builder_new ();
+    gtk_builder_add_from_resource (builder, "/org/mate/mate-applets/command/command-preferences.ui", NULL);
+    icon_chooser = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "icon_entry"));
+
+    /* set action to filechooser */
+    gtk_file_chooser_set_action (icon_chooser, GTK_FILE_CHOOSER_ACTION_OPEN);
 
     /* set filter to filechooser to only show image files */
     filter = gtk_file_filter_new ();
     gtk_file_filter_set_name (filter, _("Images"));
     gtk_file_filter_add_pixbuf_formats (filter);
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (command_applet->icon_chooser), filter);
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (command_applet->icon_chooser), filter);
+    gtk_file_chooser_add_filter (icon_chooser, filter);
+    gtk_file_chooser_set_filter (icon_chooser, filter);
 
-    /* set filename path to filechooser */
+    /* set current filename path to filechooser */
     path = get_icon_path (command_applet);
-    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (command_applet->icon_chooser), path);
+    gtk_file_chooser_set_filename (icon_chooser, path);
     g_free (path);
-
 
     dialog = GET_DIALOG ("preferences_dialog");
 
@@ -323,7 +306,7 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
     g_settings_bind (command_applet->settings, INTERVAL_KEY, GET_WIDGET ("interval_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
     g_settings_bind (command_applet->settings, WIDTH_KEY, GET_WIDGET ("width_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
     g_settings_bind (command_applet->settings, ICON_SIZE_KEY, GET_WIDGET ("icon_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
-    g_settings_bind (command_applet->settings, ICON_NAME_KEY, GET_WIDGET ("icon_entry"), "title", G_SETTINGS_BIND_GET_NO_CHANGES);
+    g_settings_bind (command_applet->settings, ICON_NAME_KEY, GET_WIDGET ("icon_entry"), "title", G_SETTINGS_BIND_DEFAULT);
     g_settings_bind (command_applet->settings, SHOW_ICON_KEY, GET_WIDGET ("show_icon_check"), "active", G_SETTINGS_BIND_DEFAULT);
 
     /* signals */
@@ -342,7 +325,7 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
                       dialog);
 
     g_object_unref (builder);
-    
+
     gtk_widget_show_all (GTK_WIDGET (dialog));
 }
 
@@ -382,29 +365,19 @@ settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_a
 
     if (!name || *name == '\0' || (command_applet->filename && !strcmp (command_applet->filename, name))) {
         g_free(name);
+        g_free(command_applet->filename);
+        command_applet->filename = NULL;
         return;
     }
 
     if (command_applet->filename)
         g_free (command_applet->filename);
     command_applet->filename = g_strdup (name);
-    
-    load_icon_image (command_applet);
 
-    if (command_applet->icon_chooser) {
-        gchar *path_gsettings;
-        gchar *path_chooser;
-
-        path_gsettings = get_icon_path (command_applet);
-        path_chooser = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (command_applet->icon_chooser));
-        if (strcmp (path_gsettings, path_chooser))
-            gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (command_applet->icon_chooser), path_gsettings);
-
-        g_free (path_gsettings);
-        g_free (path_chooser);
-    }
     if (name)
-        g_free (name);
+      g_free (name);
+
+    load_icon_image (command_applet);
 }
 
 static void
@@ -597,14 +570,14 @@ command_applet_fill (MatePanelApplet* applet)
     command_applet->applet = applet;
     command_applet->settings = mate_panel_applet_settings_new (applet, COMMAND_SCHEMA);
 
-    command_applet->filename = g_settings_get_string (command_applet->settings, ICON_NAME_KEY);
     command_applet->interval = g_settings_get_int (command_applet->settings, INTERVAL_KEY);
     command_applet->cmdline = g_settings_get_string (command_applet->settings, COMMAND_KEY);
-    command_applet->width = g_settings_get_int (command_applet->settings, WIDTH_KEY);
+    command_applet->filename = g_settings_get_string (command_applet->settings, ICON_NAME_KEY);
     command_applet->size = g_settings_get_int (command_applet->settings, ICON_SIZE_KEY);
+    command_applet->width = g_settings_get_int (command_applet->settings, WIDTH_KEY);
     command_applet->command = ma_command_new(command_applet->cmdline, NULL);
     command_applet->cancellable = g_cancellable_new ();
-    
+
     command_applet->buf = gdk_pixbuf_new_from_file_at_size (command_applet->filename, command_applet->size, command_applet->size, NULL);
     command_applet->box = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
     command_applet->image = GTK_IMAGE (gtk_image_new_from_pixbuf (command_applet->buf));
