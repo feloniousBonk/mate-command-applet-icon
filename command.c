@@ -281,8 +281,7 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
     GtkFileChooser *icon_chooser;
     gchar *path;
 
-    builder = gtk_builder_new ();
-    gtk_builder_add_from_resource (builder, "/org/mate/mate-applets/command/command-preferences.ui", NULL);
+    builder = gtk_builder_new_from_resource ("/org/mate/mate-applets/command/command-preferences.ui");
     icon_chooser = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "icon_entry"));
 
     /* set action to filechooser */
