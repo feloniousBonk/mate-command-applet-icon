@@ -364,8 +364,6 @@ settings_icon_changed (GSettings *settings, gchar *key, CommandApplet *command_a
 
     if (!name || *name == '\0' || (command_applet->filename && !strcmp (command_applet->filename, name))) {
         g_free(name);
-        g_free(command_applet->filename);
-        command_applet->filename = NULL;
         return;
     }
 
