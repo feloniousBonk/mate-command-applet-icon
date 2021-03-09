@@ -1,5 +1,5 @@
 diff --git a/command.c b/commandiff.c
-index 4536897..a0998bb 100644
+index 4536897..5ec6998 100644
 --- a/command.c
 +++ b/commandiff.c
 @@ -42,6 +42,8 @@
@@ -180,7 +180,7 @@ index 4536897..a0998bb 100644
      gtk_builder_connect_signals (builder, command_applet);
  
      g_signal_connect (dialog, "response",
-@@ -242,6 +355,45 @@ settings_command_changed (GSettings *settings, gchar *key, CommandApplet *comman
+@@ -242,6 +355,43 @@ settings_command_changed (GSettings *settings, gchar *key, CommandApplet *comman
      command_execute (command_applet);
  }
  
@@ -193,8 +193,6 @@ index 4536897..a0998bb 100644
 +
 +    if (!name || *name == '\0' || (command_applet->filename && !strcmp (command_applet->filename, name))) {
 +        g_free(name);
-+        g_free(command_applet->filename);
-+        command_applet->filename = NULL;
 +        return;
 +    }
 +
@@ -226,7 +224,7 @@ index 4536897..a0998bb 100644
  static void
  settings_width_changed (GSettings *settings, gchar *key, CommandApplet *command_applet)
  {
-@@ -419,19 +571,22 @@ command_applet_fill (MatePanelApplet* applet)
+@@ -419,19 +569,22 @@ command_applet_fill (MatePanelApplet* applet)
  
      command_applet->interval = g_settings_get_int (command_applet->settings, INTERVAL_KEY);
      command_applet->cmdline = g_settings_get_string (command_applet->settings, COMMAND_KEY);
@@ -251,7 +249,7 @@ index 4536897..a0998bb 100644
      gtk_box_pack_start (command_applet->box,
                          GTK_WIDGET (command_applet->label),
                          TRUE, TRUE, 0);
-@@ -458,6 +613,14 @@ command_applet_fill (MatePanelApplet* applet)
+@@ -458,6 +611,14 @@ command_applet_fill (MatePanelApplet* applet)
                        G_CALLBACK (settings_width_changed),
                        command_applet);
  
@@ -266,7 +264,7 @@ index 4536897..a0998bb 100644
      g_settings_bind (command_applet->settings,
                       SHOW_ICON_KEY,
                       command_applet->image,
-@@ -471,6 +634,8 @@ command_applet_fill (MatePanelApplet* applet)
+@@ -471,6 +632,8 @@ command_applet_fill (MatePanelApplet* applet)
                                    G_N_ELEMENTS (applet_menu_actions), command_applet);
      mate_panel_applet_setup_menu (command_applet->applet, ui, action_group);
  
