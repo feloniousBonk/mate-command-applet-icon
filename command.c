@@ -168,15 +168,13 @@ static char* get_icon_path(CommandApplet *command_applet)
 
 static gboolean load_icon_image(CommandApplet *command_applet)
 {
+    GdkPixbuf *buf;
     GError    *error = NULL;
     char      *path;
 
     path = get_icon_path (command_applet);
 
-    if (command_applet->buf)
-        g_object_unref (command_applet->buf);
-    command_applet->buf = gdk_pixbuf_new_from_file_at_size (path, command_applet->size, command_applet->size, &error);
-
+    buf = gdk_pixbuf_new_from_file_at_size (path, command_applet->size, command_applet->size, &error);
     if (error) {
         g_warning ("Cannot load '%s': %s", path, error->message);
         g_error_free (error);
@@ -184,6 +182,10 @@ static gboolean load_icon_image(CommandApplet *command_applet)
         return FALSE;
     }
 
+    if (command_applet->buf)
+        g_object_unref (command_applet->buf);
+    command_applet->buf = buf;
+    
     gtk_image_set_from_pixbuf(GTK_IMAGE(command_applet->image), command_applet->buf);
 
     g_free (path);
