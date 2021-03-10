@@ -219,7 +219,6 @@ static void icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
     CommandApplet *command_applet;
 
     command_applet = (CommandApplet*) user_data;
-
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
     
     if (!filename || !filename[0]) {
