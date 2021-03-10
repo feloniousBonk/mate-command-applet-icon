@@ -1,5 +1,5 @@
 diff --git a/command.c b/command.v22.c
-index 2412d12..afeaefb 100644
+index 2412d12..7321521 100644
 --- a/command.c
 +++ b/command.v22.c
 @@ -42,6 +42,8 @@
@@ -11,21 +11,25 @@ index 2412d12..afeaefb 100644
  #define SHOW_ICON_KEY  "show-icon"
  #define WIDTH_KEY      "width"
  
-@@ -62,11 +64,14 @@ typedef struct
+@@ -62,13 +64,16 @@ typedef struct
      GtkLabel          *label;
      GtkImage          *image;
      GtkBox            *box;
 +    GdkPixbuf         *buf;
      MaCommand         *command;
      GCancellable      *cancellable;
-     gboolean           running;
+-    gboolean           running;
  
      gchar             *cmdline;
+-    gint               interval;
 +    gchar             *filename;
 +    gint               size;
-     gint               interval;
      gint               width;
++    gint               interval;
++    gboolean           running;
  
+     guint              timeout_id;
+ } CommandApplet;
 @@ -79,8 +84,13 @@ static gboolean command_execute (CommandApplet *command_applet);
  static gboolean command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data);
  static void interval_value_changed (GtkSpinButton *spin_button, gpointer user_data);
@@ -95,37 +99,36 @@ index 2412d12..afeaefb 100644
  static gboolean
  command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data)
  {
-@@ -154,6 +212,50 @@ command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data)
+@@ -154,6 +212,49 @@ command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data)
      return TRUE;
  }
  
 +static void icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
 +{
-+    gchar *filename;
++    gchar *file;
 +    gchar *path_gsettings;
 +    CommandApplet *command_applet;
 +
 +    command_applet = (CommandApplet*) user_data;
++    file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
 +
-+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
-+    
-+    if (!filename || !filename[0]) {
-+        g_free (filename);
++    if (!file || !file[0]) {
++        g_free (file);
 +        return;
 +    }
 +
 +    path_gsettings = get_icon_path (command_applet);
 +
-+    if (!strcmp (filename, path_gsettings)) {
-+        g_free (filename);
++    if (!strcmp (file, path_gsettings)) {
++        g_free (file);
 +        g_free (path_gsettings);
 +        return;
 +    }
 +    g_free (path_gsettings);
 +
-+    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, filename);
++    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, file);
 +
-+    g_free (filename);
++    g_free (file);
 +}
 +
 +static void icon_size_changed (GtkSpinButton *spin_button, gpointer user_data)
@@ -146,7 +149,7 @@ index 2412d12..afeaefb 100644
  static void interval_value_changed (GtkSpinButton *spin_button, gpointer user_data)
  {
      gint value;
-@@ -188,14 +290,35 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
+@@ -188,14 +289,35 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
  {
      GtkDialog *dialog;
      GtkBuilder *builder;
@@ -182,7 +185,7 @@ index 2412d12..afeaefb 100644
      g_settings_bind (command_applet->settings, SHOW_ICON_KEY, GET_WIDGET ("show_icon_check"), "active", G_SETTINGS_BIND_DEFAULT);
  
      /* signals */
-@@ -203,7 +326,10 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
+@@ -203,7 +325,10 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
                                        "on_command_entry_focus_out_event", G_CALLBACK (command_text_changed),
                                        "on_interval_spinbutton_value_changed", G_CALLBACK (interval_value_changed),
                                        "on_width_spinbutton_value_changed", G_CALLBACK (width_value_changed),
@@ -193,7 +196,7 @@ index 2412d12..afeaefb 100644
      gtk_builder_connect_signals (builder, command_applet);
  
      g_signal_connect (dialog, "response",
-@@ -242,6 +368,43 @@ settings_command_changed (GSettings *settings, gchar *key, CommandApplet *comman
+@@ -242,6 +367,43 @@ settings_command_changed (GSettings *settings, gchar *key, CommandApplet *comman
      command_execute (command_applet);
  }
  
@@ -237,7 +240,7 @@ index 2412d12..afeaefb 100644
  static void
  settings_width_changed (GSettings *settings, gchar *key, CommandApplet *command_applet)
  {
-@@ -419,19 +582,22 @@ command_applet_fill (MatePanelApplet* applet)
+@@ -419,19 +581,22 @@ command_applet_fill (MatePanelApplet* applet)
  
      command_applet->interval = g_settings_get_int (command_applet->settings, INTERVAL_KEY);
      command_applet->cmdline = g_settings_get_string (command_applet->settings, COMMAND_KEY);
@@ -262,7 +265,7 @@ index 2412d12..afeaefb 100644
      gtk_box_pack_start (command_applet->box,
                          GTK_WIDGET (command_applet->label),
                          TRUE, TRUE, 0);
-@@ -458,6 +624,14 @@ command_applet_fill (MatePanelApplet* applet)
+@@ -458,6 +623,14 @@ command_applet_fill (MatePanelApplet* applet)
                        G_CALLBACK (settings_width_changed),
                        command_applet);
  
@@ -277,7 +280,7 @@ index 2412d12..afeaefb 100644
      g_settings_bind (command_applet->settings,
                       SHOW_ICON_KEY,
                       command_applet->image,
-@@ -471,6 +645,8 @@ command_applet_fill (MatePanelApplet* applet)
+@@ -471,6 +644,8 @@ command_applet_fill (MatePanelApplet* applet)
                                    G_N_ELEMENTS (applet_menu_actions), command_applet);
      mate_panel_applet_setup_menu (command_applet->applet, ui, action_group);
  
