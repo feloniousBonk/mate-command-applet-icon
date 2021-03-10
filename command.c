@@ -67,13 +67,13 @@ typedef struct
     GdkPixbuf         *buf;
     MaCommand         *command;
     GCancellable      *cancellable;
-    gboolean           running;
 
     gchar             *cmdline;
     gchar             *filename;
     gint               size;
-    gint               interval;
     gint               width;
+    gint               interval;
+    gboolean           running;
 
     guint              timeout_id;
 } CommandApplet;
@@ -214,30 +214,30 @@ command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data)
 
 static void icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
 {
-    gchar *filename;
+    gchar *file;
     gchar *path_gsettings;
     CommandApplet *command_applet;
 
     command_applet = (CommandApplet*) user_data;
-    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
-    
-    if (!filename || !filename[0]) {
-        g_free (filename);
+    file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
+
+    if (!file || !file[0]) {
+        g_free (file);
         return;
     }
 
     path_gsettings = get_icon_path (command_applet);
 
-    if (!strcmp (filename, path_gsettings)) {
-        g_free (filename);
+    if (!strcmp (file, path_gsettings)) {
+        g_free (file);
         g_free (path_gsettings);
         return;
     }
     g_free (path_gsettings);
 
-    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, filename);
+    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, file);
 
-    g_free (filename);
+    g_free (file);
 }
 
 static void icon_size_changed (GtkSpinButton *spin_button, gpointer user_data)
