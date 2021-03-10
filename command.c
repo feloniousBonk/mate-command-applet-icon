@@ -85,7 +85,7 @@ static gboolean command_text_changed (GtkWidget *widget, GdkEvent  *event, gpoin
 static void interval_value_changed (GtkSpinButton *spin_button, gpointer user_data);
 static void width_value_changed (GtkSpinButton *spin_button, gpointer user_data);
 static void icon_size_changed (GtkSpinButton *spin_button, gpointer user_data);
-static void icon_name_changed (GtkFileChooser *chooser, gpointer user_data);
+static void icon_name_changed (GtkFileChooser *chooser, CommandApplet *command_applet);
 static void command_async_ready_callback (GObject *source_object, GAsyncResult *res, gpointer user_data);
 static gboolean timeout_callback (CommandApplet *command_applet);
 static gboolean load_icon_image(CommandApplet *command_applet);
@@ -214,20 +214,30 @@ command_text_changed (GtkWidget *widget, GdkEvent  *event, gpointer user_data)
     return TRUE;
 }
 
-static void icon_name_changed (GtkFileChooser *chooser, gpointer user_data)
+static void icon_name_changed (GtkFileChooser *chooser, CommandApplet *command_applet)
 {
-    gchar *file;
-    CommandApplet *command_applet;
+    gchar *filename;
+    gchar *path_gsettings;
 
-    command_applet = (CommandApplet*) user_data;
-    file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chooser));
-
-    if (command_applet->filename == file)
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(chooser));
+    
+    if (!filename || !filename[0]) {
+        g_free (filename);
         return;
+    }
 
-    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, file);
+    path_gsettings = get_icon_path (command_applet);
 
-    g_free (file);
+    if (!strcmp (filename, path_gsettings)) {
+        g_free (filename);
+        g_free (path_gsettings);
+        return;
+    }
+    g_free (path_gsettings);
+
+    g_settings_set_string (command_applet->settings, ICON_NAME_KEY, filename);
+
+    g_free (filename);
 }
 
 static void icon_size_changed (GtkSpinButton *spin_button, gpointer user_data)
