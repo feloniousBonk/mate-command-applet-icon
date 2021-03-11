@@ -197,11 +197,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFileChooserButton" id="icon_entry">
+                  <object class="GtkFileChooserButton" id="icon_chooser">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="title" translatable="yes">Select an animation</property>
-                    <signal name="selection-changed" handler="on_icon_entry_selection_changed" swapped="no"/>
+                    <signal name="selection-changed" handler="on_icon_chooser_selection_changed" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
