@@ -294,7 +294,7 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
     gchar *path;
 
     builder = gtk_builder_new_from_resource ("/org/mate/mate-applets/command/command-preferences.ui");
-    icon_chooser = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "icon_entry"));
+    icon_chooser = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "icon_chooser"));
 
     /* set action to filechooser */
     gtk_file_chooser_set_action (icon_chooser, GTK_FILE_CHOOSER_ACTION_OPEN);
@@ -317,7 +317,7 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
     g_settings_bind (command_applet->settings, INTERVAL_KEY, GET_WIDGET ("interval_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
     g_settings_bind (command_applet->settings, WIDTH_KEY, GET_WIDGET ("width_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
     g_settings_bind (command_applet->settings, ICON_SIZE_KEY, GET_WIDGET ("icon_spinbutton"), "value", G_SETTINGS_BIND_GET_NO_CHANGES);
-    g_settings_bind (command_applet->settings, ICON_NAME_KEY, GET_WIDGET ("icon_entry"), "title", G_SETTINGS_BIND_DEFAULT);
+    g_settings_bind (command_applet->settings, ICON_NAME_KEY, GET_WIDGET ("icon_chooser"), "title", G_SETTINGS_BIND_DEFAULT);
     g_settings_bind (command_applet->settings, SHOW_ICON_KEY, GET_WIDGET ("show_icon_check"), "active", G_SETTINGS_BIND_DEFAULT);
 
     /* signals */
@@ -326,7 +326,7 @@ command_settings_callback (GtkAction *action, CommandApplet *command_applet)
                                       "on_interval_spinbutton_value_changed", G_CALLBACK (interval_value_changed),
                                       "on_width_spinbutton_value_changed", G_CALLBACK (width_value_changed),
                                       "on_icon_spinbutton_value_changed", G_CALLBACK (icon_size_changed),
-                                      "on_icon_entry_selection_changed", G_CALLBACK (icon_name_changed),
+                                      "on_icon_chooser_selection_changed", G_CALLBACK (icon_name_changed),
                                       NULL);
 
     gtk_builder_connect_signals (builder, command_applet);
