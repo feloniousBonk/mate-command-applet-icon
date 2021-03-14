@@ -176,7 +176,6 @@ static gboolean load_icon_image(CommandApplet *command_applet)
 
     buf = gdk_pixbuf_new_from_file_at_size (path, command_applet->size, command_applet->size, &error);
     if (error) {
-        g_warning ("Cannot load '%s': %s", path, error->message);
         g_error_free (error);
         g_free (path);
         return FALSE;
